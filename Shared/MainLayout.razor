@@ -1,15 +1,45 @@
 ﻿@inherits LayoutComponentBase
+@inject StateService state
+@inject NavigationManager navigation
 
-<div class="sidebar">
-    <NavMenu />
-</div>
+<AuthorizeView>
+    <Authorized>
+        <div class="sidebar">
+            <NavMenu />
+        </div>
 
-<div class="main">
-    <div class="top-row px-4">
-        <a href="http://blazor.net" target="_blank" class="ml-md-auto">About</a>
-    </div>
+        <div class="main">
+            <div class="top-row px-4">
+                <span>Welcome, @username</span>
+                <button class="btn btn-outline-primary oi oi-account-logout ml-4" @onclick="@Logout" />
+            </div>
 
-    <div class="content px-4">
-        @Body
-    </div>
-</div>
+            <div class="content px-4">
+                @Body
+            </div>
+        </div>
+    </Authorized>
+    <NotAuthorized>
+        <Login />
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private string username;
+
+    protected override void OnInitialized()
+    {
+        var user = this.state.LoggedUser;
+
+        if (user != null)
+        {
+            this.username = user.Email;
+        }
+    }
+
+    private void Logout()
+    {
+        this.state.LoggedUser = null;
+        this.navigation.NavigateTo("/login", true);
+    }
+}

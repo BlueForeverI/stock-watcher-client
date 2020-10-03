@@ -1,0 +1,28 @@
+﻿@page "/stocks"
+@inject StocksService stocksService
+
+<h3>Stocks</h3>
+
+<div class="row">
+    @foreach (var stock in stocks)
+    {
+        <div class="card col-md-3 col-xl-2 m-3">
+            <div class="card-title text-center font-weight-bold pt-3">@stock.Symbol</div>
+            <div class="card-body">
+                <p class="text-center">@stock.Name</p>
+                <div class="d-flex flex-row justify-content-end">
+                    <button class="btn btn-outline-primary oi oi-plus font-weight-bold"></button>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private List<Stock> stocks = new List<Stock>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.stocks = await this.stocksService.GetStocks();
+    }
+}

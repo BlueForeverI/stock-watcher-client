@@ -1,0 +1,39 @@
+﻿@page "/login"
+@inject StateService state
+@inject NavigationManager navigation
+
+<div class="card">
+    <div class="card-header">
+        <h3>Login</h3>
+    </div>
+    <div class="card-body">
+        <EditForm Model="@user" OnValidSubmit="@OnSubmit">
+            <ValidationSummary />
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <InputText id="email" @bind-Value="user.Email" class="form-control" />
+            </div>
+
+            <button type="submit" class="btn btn-primary">Login</button>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private User user = new User();
+
+    protected override void OnInitialized()
+    {
+        if (this.state.LoggedUser != null)
+        {
+            this.state.LoggedUser = null;
+        }
+    }
+
+    private void OnSubmit()
+    {
+        this.state.LoggedUser = new User { ID = 1, Email = user.Email };
+        this.navigation.NavigateTo("/", true);
+    }
+}
