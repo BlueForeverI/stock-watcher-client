@@ -10,21 +10,21 @@
 }
 else
 {
-    <div class="row">
-        @foreach (var stock in stocks)
-        {
-        <div class="card stock-card col-md-3 col-xl-3 m-3">
-            <div class="card-title text-center font-weight-bold pt-3">@stock.Symbol</div>
-            <div class="card-body">
-                <p class="text-center">@stock.Name</p>
-                <div class="d-flex flex-row justify-content-center">
-                    <button class="btn btn-outline-primary oi oi-plus font-weight-bold"
-                            @onclick="@(() => AddStock(stock.ID))"></button>
-                </div>
-            </div>
-        </div>
-        }
-    </div>
+    <MatTable Items="@stocks" Class="mat-elevation-z5">
+        <MatTableHeader>
+            <th>Symbol</th>
+            <th style="width: 60%">Name</th>
+            <th>Action</th>
+        </MatTableHeader>
+        <MatTableRow>
+            <td>@context.Symbol</td>
+            <td>@context.Name</td>
+            <td>
+                <button class="btn btn-outline-primary oi oi-plus font-weight-bold"
+                        @onclick="@(() => AddStock(context.ID))"></button>
+            </td>
+        </MatTableRow>
+    </MatTable>
 }
 
 @code {
