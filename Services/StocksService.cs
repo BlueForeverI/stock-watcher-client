@@ -24,5 +24,11 @@ namespace StockWatcherClient.Services
         {
             return await this.httpClient.GetFromJsonAsync<List<Stock>>(this.apiUrl + "/stocks");
         }
+
+        public async Task<List<TrendingStock>> GetTrendingStocks()
+        {
+            return await this.httpClient.GetFromJsonAsync<List<TrendingStock>>(
+                this.apiUrl + "/stocks/trending");
+        }
     }
 }

@@ -1,0 +1,39 @@
+﻿@page "/trending"
+@inject StocksService stocksService
+
+<h3>Trending</h3>
+
+@if (trendingStocks == null)
+{
+    <div class="spinner-border text-primary"></div>
+}
+else
+{
+    <div class="row">
+        @foreach (var stock in trendingStocks)
+        {
+            <div class="card col-md-4 col-xl-3 m-3">
+                <div class="card-title text-center font-weight-bold pt-3">@stock.Symbol</div>
+                <div class="card-body">
+                    <p class="text-center">@stock.LongName</p>
+                    <div class="d-flex flex-row justify-content-between">
+                        <span
+                              class="@( stock.RegularMarketChangePercent > 0 ? "text-success" : "text-danger")">
+                            @stock.RegularMarketChangePercent.ToString("0.00")
+                        </span>
+                        <button class="btn btn-outline-primary oi oi-plus font-weight-bold"></button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
+@code {
+    private List<TrendingStock> trendingStocks;
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.trendingStocks = await this.stocksService.GetTrendingStocks();
+    }
+}

@@ -181,3 +181,8 @@ app {
         display: block;
     }
 }
+
+.spinner-border {
+    width: 5rem;
+    height: 5rem;
+}
