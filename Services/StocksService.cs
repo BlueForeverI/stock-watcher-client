@@ -1,8 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using StockWatcherClient.Models;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Json;
 using System.Threading.Tasks;
@@ -29,6 +27,19 @@ namespace StockWatcherClient.Services
         {
             return await this.httpClient.GetFromJsonAsync<List<TrendingStock>>(
                 this.apiUrl + "/stocks/trending");
+        }
+
+        public async Task AddStock(int stockId, int userId)
+        {
+            var url = $"{this.apiUrl}/users/{userId}/stocks";
+            var content = JsonContent.Create(new { Id = stockId });
+            await this.httpClient.PostAsync(url, content);
+        }
+
+        public async Task<List<WatchlistStock>> GetWatchList(int userId)
+        {
+            var url = $"{this.apiUrl}/users/{userId}/watchlist";
+            return await this.httpClient.GetFromJsonAsync<List<WatchlistStock>>(url);
         }
     }
 }

@@ -1,7 +1,43 @@
 ﻿@page "/"
+@inject StateService state
+@inject StocksService stocksService
 
 <h3>Watchlist</h3>
 
+@if (stocks == null)
+{
+    <div class="spinner-border text-primary"></div>
+}
+else
+{
+    <div class="row">
+        @foreach (var stock in stocks)
+        {
+            <div class="col-md-3 col-xl-4 p-3">
+                <div class="card stock-card">
+                    <div class="card-title text-center font-weight-bold pt-3">@stock.QuoteType.Symbol</div>
+                    <div class="card-body">
+                        <p class="text-center">@stock.QuoteType.LongName</p>
+                        <div class="d-flex flex-row justify-content-between">
+                            <span>
+                                @stock.Price.RegularMarketPrice.Fmt
+                            </span>
+                            <span class="@( stock.Price.RegularMarketChangePercent.Raw > 0 ? "text-success" : "text-danger")">
+                                $@stock.Price.RegularMarketChangePercent.Fmt
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+}
+
 @code {
-    private bool isLoading = false;
+    private List<WatchlistStock> stocks;
+
+    protected override async Task OnInitializedAsync()
+    {
+        this.stocks = await this.stocksService.GetWatchList(this.state.LoggedUser.ID);
+    }
 }

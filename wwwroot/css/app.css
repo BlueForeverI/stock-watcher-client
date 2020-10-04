@@ -186,3 +186,13 @@ app {
     width: 5rem;
     height: 5rem;
 }
+
+.stock-card {
+    height: 200px;
+}
+
+.stock-card .card-body {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
