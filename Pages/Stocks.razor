@@ -4,10 +4,20 @@
 
 <h3>Stocks</h3>
 
-@if (stocks == null)
+<EditForm Model="this" OnSubmit="@FilterStocks">
+    <div class="form-group d-flex flex-row">
+        <InputText class="form-control mr-2" @bind-Value="@searchValue"></InputText>
+        <button class="btn btn-primary" type="submit">Filter</button>
+    </div>
+</EditForm>
+
+@if (loading)
 {
-<div class="spinner-border text-primary"></div>
+    <div class="spinner-border text-primary"></div>
 }
+else if (stocks != null && stocks.Count == 0) {
+    <p>No stocks found</p>
+} 
 else
 {
     <MatTable Items="@stocks" Class="mat-elevation-z5">
@@ -28,17 +38,31 @@ else
 }
 
 @code {
+    private bool loading;
     private List<Stock> stocks;
+    private string searchValue;
 
     protected override async Task OnInitializedAsync()
     {
+        this.loading = true;
         this.stocks = await this.stocksService.GetStocks();
+        this.loading = false;
     }
 
     private async void AddStock(int stockId)
     {
-        this.stocks = null;
+        this.loading = true;
         await this.stocksService.AddStock(stockId, this.state.LoggedUser.ID);
         this.stocks = await this.stocksService.GetStocks();
+        this.loading = false;
+        this.StateHasChanged();
+    }
+
+    private async void FilterStocks()
+    {
+        this.loading = true;
+        this.stocks = await this.stocksService.FindStocks(this.searchValue);
+        this.loading = false;
+        this.StateHasChanged();
     }
 }

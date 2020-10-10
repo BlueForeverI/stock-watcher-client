@@ -4,26 +4,30 @@
 
 <h3>Watchlist</h3>
 
-@if (stocks == null)
+@if (loading)
 {
     <div class="spinner-border text-primary"></div>
 }
 else
 {
-    <div class="row">
+    <div class="row w-100">
         @foreach (var stock in stocks)
         {
-            <div class="col-md-3 col-xl-4 p-3">
+            <div class="col-md-3 col-xl-2 p-3">
                 <div class="card stock-card">
-                    <div class="card-title text-center font-weight-bold pt-3">@stock.QuoteType.Symbol</div>
+                    <div class="card-header">
+                        <div class="card-title text-center font-weight-bold pt-3">@stock.QuoteType.Symbol</div>
+                        <button class="btn btn-danger oi oi-x font-weight-bold"
+                                @onclick="@(() => RemoveStock(stock.StockId))"></button>
+                    </div>
                     <div class="card-body">
                         <p class="text-center">@stock.QuoteType.LongName</p>
                         <div class="d-flex flex-row justify-content-between">
                             <span>
-                                @stock.Price.RegularMarketPrice.Fmt
+                                $@stock.Price.RegularMarketPrice.Fmt
                             </span>
                             <span class="@( stock.Price.RegularMarketChangePercent.Raw > 0 ? "text-success" : "text-danger")">
-                                $@stock.Price.RegularMarketChangePercent.Fmt
+                                @stock.Price.RegularMarketChangePercent.Fmt
                             </span>
                         </div>
                     </div>
@@ -35,9 +39,21 @@ else
 
 @code {
     private List<WatchlistStock> stocks;
+    private bool loading;
 
     protected override async Task OnInitializedAsync()
     {
+        this.loading = true;
         this.stocks = await this.stocksService.GetWatchList(this.state.LoggedUser.ID);
+        this.loading = false;
+    }
+
+    private async Task RemoveStock(int stockId)
+    {
+        this.loading = true;
+        await this.stocksService.RemoveFromWatchlist(state.LoggedUser.ID, stockId);
+        this.stocks = await this.stocksService.GetWatchList(this.state.LoggedUser.ID);
+        this.loading = false;
+        this.StateHasChanged();
     }
 }

@@ -3,6 +3,7 @@ using StockWatcherClient.Models;
 using System.Collections.Generic;
 using System.Net.Http;
 using System.Net.Http.Json;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace StockWatcherClient.Services
@@ -23,6 +24,11 @@ namespace StockWatcherClient.Services
             return await this.httpClient.GetFromJsonAsync<List<Stock>>(this.apiUrl + "/stocks");
         }
 
+        public async Task<List<Stock>> FindStocks(string query)
+        {
+            return await this.httpClient.GetFromJsonAsync<List<Stock>>(this.apiUrl + $"/stocks?query={query}");
+        }
+
         public async Task<List<TrendingStock>> GetTrendingStocks()
         {
             return await this.httpClient.GetFromJsonAsync<List<TrendingStock>>(
@@ -40,6 +46,12 @@ namespace StockWatcherClient.Services
         {
             var url = $"{this.apiUrl}/users/{userId}/watchlist";
             return await this.httpClient.GetFromJsonAsync<List<WatchlistStock>>(url);
+        }
+
+        public async Task RemoveFromWatchlist(int userId, int stockId)
+        {
+            var url = $"{this.apiUrl}/users/{userId}/stocks/{stockId}";
+            await this.httpClient.DeleteAsync(url);
         }
     }
 }

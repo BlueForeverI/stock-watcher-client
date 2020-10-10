@@ -9,24 +9,27 @@
 }
 else
 {
-    <div class="row">
-        @foreach (var stock in trendingStocks)
-        {
-            <div class="card col-md-4 col-xl-3 m-3">
-                <div class="card-title text-center font-weight-bold pt-3">@stock.Symbol</div>
-                <div class="card-body">
-                    <p class="text-center">@stock.LongName</p>
-                    <div class="d-flex flex-row justify-content-between">
-                        <span
-                              class="@( stock.RegularMarketChangePercent > 0 ? "text-success" : "text-danger")">
-                            @stock.RegularMarketChangePercent.ToString("0.00")
-                        </span>
-                        <button class="btn btn-outline-primary oi oi-plus font-weight-bold"></button>
-                    </div>
-                </div>
-            </div>
-        }
-    </div>
+    <MatTable Items="@trendingStocks" Class="mat-elevation-z5">
+        <MatTableHeader>
+            <th>Symbol</th>
+            <th style="width: 60%">Name</th>
+            <th>Change</th>
+            <th>Action</th>
+        </MatTableHeader>
+        <MatTableRow>
+            <td>@context.Symbol</td>
+            <td>@context.LongName</td>
+            <td>
+                <span class="@( context.RegularMarketChangePercent > 0 ? "text-success" : "text-danger")">
+                    @context.RegularMarketChangePercent.ToString("0.00")
+                </span>
+            </td>
+            <td>
+                <button class="btn btn-outline-primary oi oi-plus font-weight-bold"
+                        @*@onclick="@(() => AddStock(context.ID))*@"></button>
+            </td>
+        </MatTableRow>
+    </MatTable>
 }
 
 @code {

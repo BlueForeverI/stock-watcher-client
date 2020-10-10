@@ -3,6 +3,7 @@ namespace StockWatcherClient.Models
 {
     public class WatchlistStock
     {
+        public int StockId { get; set; }
         public StockPrice Price { get; set; }
         public QuoteTypeData QuoteType { get; set; }
 
