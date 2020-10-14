@@ -14,7 +14,7 @@ else
             <th>Symbol</th>
             <th style="width: 60%">Name</th>
             <th>Change</th>
-            <th>Action</th>
+            @*<th>Action</th>*@
         </MatTableHeader>
         <MatTableRow>
             <td>@context.Symbol</td>
@@ -24,10 +24,10 @@ else
                     @context.RegularMarketChangePercent.ToString("0.00")
                 </span>
             </td>
-            <td>
+            @*<td>
                 <button class="btn btn-outline-primary oi oi-plus font-weight-bold"
-                        @*@onclick="@(() => AddStock(context.ID))*@"></button>
-            </td>
+                        @onclick="@(() => AddStock(context.ID))></button>
+            </td>*@
         </MatTableRow>
     </MatTable>
 }
